@@ -36,6 +36,12 @@ async function run() {
         const artCollection = client.db('artDB').collection('art');
 
 
+        app.get('/art',async(req,res)=> {
+          const cursor = artCollection.find();
+          const result = await cursor.toArray();
+          res.send(result);
+        })
+
         app.post('/art', async (req,res)=> {
             const newArt = req.body;
             console.log(newArt);
