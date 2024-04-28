@@ -42,12 +42,34 @@ async function run() {
           res.send(result);
         })
 
+
+
         app.get('/art/:id', async (req,res)=> {
           const id = req.params.id;
           const query = { _id : new ObjectId(id)};
           const result = await artCollection.findOne(query);
           res.send(result);
         })
+
+
+        app.get("/allcrafts/:subcategory", async(req,res)=> {
+          const subcategory = req.params.subcategory;
+          const query = { subCategory : subcategory};
+          const cursor = artCollection.find(query);
+          const result = await cursor.toArray();
+          res.send(result);
+        })
+
+        app.get("/myitems/:userEmail", async(req,res)=> {
+          const s = req.params.userEmail;
+          const query = { subCategory : subcategory};
+          const cursor = artCollection.find(query);
+          const result = await cursor.toArray();
+          res.send(result);
+        })
+
+
+
         app.get('/art-homepage', async (req,res)=> {
           
           const query = { homePage : "yes"};
