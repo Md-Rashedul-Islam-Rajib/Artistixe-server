@@ -48,6 +48,13 @@ async function run() {
           const result = await artCollection.findOne(query);
           res.send(result);
         })
+        app.get('/art-homepage', async (req,res)=> {
+          
+          const query = { homePage : "yes"};
+          const cursor =  artCollection.find(query);
+          const result = await cursor.toArray();
+          res.send(result);
+        })
 
         app.post('/art', async (req,res)=> {
             const newArt = req.body;
