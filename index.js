@@ -43,11 +43,38 @@ async function run() {
         })
 
 
-// get api for all data details
+// get api for all data details and update data
         app.get('/art/:id', async (req,res)=> {
           const id = req.params.id;
           const query = { _id : new ObjectId(id)};
           const result = await artCollection.findOne(query);
+          res.send(result);
+        })
+
+        // put api for update data 
+        app.put('/art/:id',async (req,res)=>{
+          const id = req.params.id;
+          const item = req.body;
+          console.log(item);
+          const filter = {_id : new ObjectId(id)};
+          const options = {upsert : true};
+          const updatedData = {
+            $set: {
+              name : item.name,
+              shortDescription : item.shortDescription,
+              image : item.image,
+              subCategory : item.subCategory,
+              price : item.price,
+              rating : item.rating,
+              customization : item.customization,
+              status : item.status,
+              processingTime : item.processingTime,
+              userName : item.userName,
+              userEmail : item.userEmail
+
+            }
+          };
+          const result = await artCollection.updateOne(filter,updatedData,options);
           res.send(result);
         })
 
