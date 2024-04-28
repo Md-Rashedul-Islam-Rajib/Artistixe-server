@@ -13,7 +13,7 @@ app.use(cors());
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@artstore.tattjrs.mongodb.net/?retryWrites=true&w=majority&appName=ArtStore`;
-console.log(uri);
+
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -35,7 +35,7 @@ async function run() {
         
         const artCollection = client.db('artDB').collection('art');
 
-
+// get api for all data
         app.get('/art',async(req,res)=> {
           const cursor = artCollection.find();
           const result = await cursor.toArray();
@@ -43,7 +43,7 @@ async function run() {
         })
 
 
-
+// get api for all data details
         app.get('/art/:id', async (req,res)=> {
           const id = req.params.id;
           const query = { _id : new ObjectId(id)};
@@ -51,7 +51,7 @@ async function run() {
           res.send(result);
         })
 
-
+// get api for sub-category wise data collection
         app.get("/allcrafts/:subcategory", async(req,res)=> {
           const subcategory = req.params.subcategory;
           const query = { subCategory : subcategory};
@@ -60,16 +60,17 @@ async function run() {
           res.send(result);
         })
 
+  // get api for my data list
         app.get("/myitems/:userEmail", async(req,res)=> {
-          const s = req.params.userEmail;
-          const query = { subCategory : subcategory};
+          const useremail = req.params.userEmail;
+          const query = { userEmail : useremail};
           const cursor = artCollection.find(query);
           const result = await cursor.toArray();
           res.send(result);
         })
 
 
-
+// get api  for category data in homepage
         app.get('/art-homepage', async (req,res)=> {
           
           const query = { homePage : "yes"};
@@ -77,13 +78,22 @@ async function run() {
           const result = await cursor.toArray();
           res.send(result);
         })
-
+// post api for add data to db
         app.post('/art', async (req,res)=> {
             const newArt = req.body;
             console.log(newArt);
             const result = await artCollection.insertOne(newArt);
             res.send(result);
         })
+
+// delete api for delete data from db
+app.delete("/myitems/:userEmail/:id", async (req,res)=>{
+  const id = req.params.id;
+  console.log(id);
+  const query = {_id : new ObjectId(id)};
+  const result = await artCollection.deleteOne(query);
+  res.send(result);
+})
 
 
 
