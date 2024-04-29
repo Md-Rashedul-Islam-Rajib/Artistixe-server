@@ -68,9 +68,7 @@ async function run() {
               rating : item.rating,
               customization : item.customization,
               status : item.status,
-              processingTime : item.processingTime,
-              userName : item.userName,
-              userEmail : item.userEmail
+              processingTime : item.processingTime
 
             }
           };
@@ -122,6 +120,23 @@ app.delete("/myitems/:userEmail/:id", async (req,res)=>{
   res.send(result);
 })
 
+// get api for filter data by value 'Yes'
+app.get("/myitems/:userEmail/customization_value_yes", async (req,res)=>{
+  const query = { customization : "Yes"};
+  const cursor =  artCollection.find(query);
+  const result = await cursor.toArray();
+  res.send(result);
+})
+
+
+// get api for filter data by value 'No'
+app.get("/myitems/:userEmail/customization_value_no", async (req,res)=>{
+  console.log(res);
+  const query = { customization : "No"};
+  const cursor = artCollection.find(query);
+  const result = await cursor.toArray();
+  res.send(result);
+})
 
 
 
